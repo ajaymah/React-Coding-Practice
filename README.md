@@ -1,2 +1,113 @@
-# React-Coding-Practice
-React Coding Practice Example
+### Data Table with pagination features. ###
+<a href="https://flems.io/#0=N4IgZglgNgpgziAXAbVAOwIYFsZJAOgAsAXLKEAGhAGMB7NYmBvEAXwvW10QICsEqdBk2J4hcYgAIArnBgAnOJIC8k5AB00kycE3bt6kBAAmhxJICMFPfsOYcZyYYCiWaAE9JAYUJND1rVsQDABzGEcAJgAOAP0nEFpqamkABwxiCHpHQwBlWjBiAHcMeRhJZzQQiDQYBUMbdhtdQIMjUyRJCNig+3COwwAldwwtABVCWiwUuCzKG1bQvvMAZi75+MTktIzZ80MAWRKAaxgMyslDzDD5esDGwOa4wxNHZe7W3uyQPJTCCAxJAAFdIwKD+daGRaRACs7w2SVS6UyaC+ABF0gCAIKYKDuCS3bT3bSPIIvDoAFjhdi4X32EGohAwoMkABlauCWvEoRSrBCEgjtsivl5nAB5AmSIk6Plk8ywvmffogUVQCAAN3+kgAQvJaIUUXNOZCwpEAJxU-lbJG7eIAcXkGF+9MkqPgEBCNRuIAa3RJrVlkgAbBbFXsQJjYAAPEbGBSSAASGCgYMNT2CJo6yxifM2iJ2BrDOST8EkAxgKVKcgYSLVfR9TRl7XMAHYQzSlQBJOAYABGoKgAPRGrgHLT3PMEWDOYF1oL8VGMAwDLq3ruvsbjmzRpAofizmIjK0AHU-oxR0Fx5JlvLt7nBTbDCyMIV3Cv6w8Nx1zQr22GWR5JFGB0DQtS9lgABgtO9Zy+AA5aRFDrNcG23AMLEgn8HCVAApaRVRGSQizQZcAC9zwWDMVm-W8Z3zL4KiqGo32Qj9UKbSxeW3XdDExNUAUOeQznIrlKM6VtpytOicNoBCcQgfFV0Jdc2McCw1i4394i1JheGwapJCPJMTi9UDRPJdS02gqSw1RRJiFoL132JT9zAsN5MKWeIfBKKBaGIRhtV1WgjhHVML1E5ZOMs2ihSVeMBguEZFkcljnJUjoLEpDyvltXt5AgZlE3kfLQtMzzlinGjJNisMO1Gbx6DgPDiBGYgJSlP14jQm8024kBEzQTBCEAjB3F8ky+UvCIsqqvMaviHJiGkWMGHa5S0zQyres0wxsKXEL6ECvUQMmsyMNm+850MLVZGqeAlFFfVmKUlCNvYixxI0rCwwAaVGgdWRgQp5OE41yvci6YKVZxawYIEB0G57JXW0l3q3bbvviFlaBCAi6WIZdk1B9Nys+6LqofcN5AZCBGGoNrFOR17UdU6iMc8g5NVy6n-mJqa2aCKz5p4wT5IZpzpXSidzvZuCMVVMpEyJsKKPKmbybmymFyXXwUpe1i3siKKeh25VVVreQgRBFMytedHBZiym8gKYpShdGBa18lIkY6lzOgsk3McMQEmFBWhvcS0WTu3KatodimrpAI98sYPWmYNlmOgiCHZaVABFaRqi0Nk+ltzMevjzXE4qYhSgrUOELW5n-XY6a2yDkABh15kfogLA+YimXK8utERDFpuM5bmF24575sGkZk9uoA7o7HMyA9aIXKafF8fZRqes7jj5TYXOBuwTJMbdOzzoigx3E-tR0-mod24HdT0J7Sw2s7JwPZ4AVSwACYEjAr4xwigLTe99aTHFONUEIiUrh72bl1Vu9tj4dwAGrVGoCII6wVSrX1eEfeECcvh1QamgJqUAWqrUZr7KWnRIHxD6oZGhcYTy01LkQnkd8yHQ0qHdZBk9UGvCHhg2eAANDAGo4xEVIgPcGfCq5fCLLAJQZZ65VhahkWsn9JbfxWMbCRXwACaap6A1EjkJFWIkb7MMMFvRO2tlxpwYYYq8G8WGmwAFq0DKCXRRkRf5QP4TZDEkhsRJjxOLVKBjM4rBzn-L4mIezugwNAI6+ogmZnVsPKGYZ4KIX0Z1Z47Flh5JMUqLwxYewX2KiDWxYM7bKJHkqG6b8ahn0kI9D+9D96iPLjPNE-xMAjTGg5HJRjWkFL3LDKQgIEZ9IlqUtoxDhnQ1gCMByBkjIrjLuYck4jSEqOqWKdqmgAC6mhNAwEjCkByUhYxgAwM1GQchFAAG5KAgDkLAemyIEA8AiBYU0iAQVsA4DuLgeB8DUDPj8oQjBmA8DYJc1gQA" target="_blank">Copy Data</a>
+```
+import { useState, useEffect } from "react";
+import users from "./data/users";
+
+export default function DataTable() {
+  const [message, setMessage] = useState("Data Table");
+  const [showPL, setPL] = useState([5, 10, 20]);
+  const [data, setData] = useState(users);
+  const [startPage, setSP] = useState(1);
+  const [endpage, setEP] = useState(0);
+  const [startNEXt, setNS] = useState(0);
+  const handleSelect = (e) => {
+    let num = e.target.value;
+    let orignalData = [...users];
+    let sliceData = orignalData.slice(0, num);
+    setData(sliceData);
+    const s = orignalData.length / num;
+    setEP(Math.ceil(s));
+    setNS(parseInt(num));
+    setSP(1);
+  };
+  const pageAction = (e, val) => {
+    e.preventDefault();
+    if (val == "next") {
+      let oData = [...users];
+      let x = startNEXt * startPage;
+      let y = parseInt(x+startNEXt)
+      const sl = oData.slice(x, y);
+      setData(sl);
+      setSP((p) => p + 1);
+    }
+    if (val == "prev") {
+      let oData = [...users];
+      setSP((p) => p - 1);
+      let x1 = startNEXt * (startPage - 1);
+      const sl = oData.slice(x1 - startNEXt, x1);
+      setData(sl);
+    }
+  };
+  useEffect(() => {
+    let orignalData1 = [...users];
+    let sliceData1 = orignalData1.slice(0, 5);
+    setData(sliceData1);
+    const s = orignalData1.length / 5;
+    setEP(Math.ceil(s));
+    setNS(5);
+  }, []);
+  return (
+    <div>
+      <h1>
+        {message} - {users.length} {startNEXt}
+      </h1>
+      <table>
+        <thead>
+          <tr>
+            {[
+              { label: "ID", key: "id" },
+              { label: "Name", key: "name" },
+              { label: "Age", key: "age" },
+              { label: "Occupation", key: "occupation" },
+            ].map(({ label, key }) => (
+              <th key={key}>{label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map(({ id, name, age, occupation }) => (
+            <tr key={id}>
+              <td>{id}</td>
+              <td>{name}</td>
+              <td>{age}</td>
+              <td>{occupation}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div>
+        <div className="pp">
+          <select onChange={handleSelect}>
+            {showPL.map((p) => (
+              <option value={p}>Show {p}</option>
+            ))}
+          </select>
+          <button
+            onClick={(e) => pageAction(e, "prev")}
+            disabled={startPage == 1 ? true : false}
+          >
+            Prev
+          </button>
+          <span>
+            {" "}
+            Page {startPage} of {endpage}{" "}
+          </span>
+          <button
+            onClick={(e) => pageAction(e, "next")}
+            disabled={endpage == startPage ? true : false}
+          >
+            {" "}
+            Next
+          </button>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  );
+}
+
+```
+
