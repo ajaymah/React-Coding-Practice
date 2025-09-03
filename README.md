@@ -242,4 +242,66 @@ body {
 }
 
 ```
+### 4- Loazy Load ###
+```
+import { useState, useEffect } from "react";
+
+export default function App() {
+  const [orignaldata, setOrignalData] = useState([]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [visiableCount, setVCount] = useState(2)
+  const fetchData = async () => {
+    try {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      if (!res.ok) throw new Error("failed");
+      const data = await res.json();
+      setOrignalData(data);
+      setData(data);
+    } catch (err) {
+      setError("failing..");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const loadmore = ()=>{
+    setLoading(true)
+    setTimeout(()=>{
+      setVCount((preCount)=>preCount+2)
+      setLoading(false)
+    }, 3000)
+    
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return (
+    <>
+      <h2>{"Hacker News Jobs Board"}</h2>
+      {loading && "Loading..."}
+      <ul className="dataList">
+        {data.slice(0,visiableCount).map((item, i) => {
+          return (
+            <li key={i}>
+              <h4>
+                {item.name} - {item.username}
+              </h4>
+              <p>{item.company.catchPhrase}</p>
+              <p>Email:- {item.email}</p>
+              <address> 
+              <strong>Street</strong> : {item.address.street} 
+              <br/><strong>City</strong> :{item.address.city} 
+              <br/> <strong>Zip</strong> : {item.address.zipcode}
+              </address>
+            </li>
+          );
+        })}
+      </ul>
+      <div><button onClick={loadmore}>{ !loading ? "Load more.." : "Loading..."}</button></div>
+    </>
+  );
+}
+
+```
 
