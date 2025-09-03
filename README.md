@@ -164,4 +164,82 @@ export default function App() {
 }
 
 ```
+### 3- Trafic light ###
+```
+import React, {useState, useEffect} from 'react';
+export default function TrafficLight() {
+  const [hightlight, setHightLight] = useState("red");
+  useEffect(()=>{
+    let timer;
+    if(hightlight == 'red'){
+       timer = setTimeout(()=>{
+                  setHightLight('yellow');
+                  clearTimeout(timer)
+                }, 2000)
+    } else if(hightlight == 'yellow'){
+       timer = setTimeout(()=>{
+                  setHightLight('green');
+                  clearTimeout(timer)
+                }, 1000)
+    } else {
+      timer = setTimeout(()=>{
+                  setHightLight('red');
+                  clearTimeout(timer)
+                }, 3000)
+    }
+   
+  },[hightlight])
+  return (
+    <>
+    <div className="traficLight">
+      <div className={`light red ${hightlight == "red" ? 'hightlight' : ""}`}></div>
+      <div className={`light yellow ${hightlight == "yellow" ? 'hightlight' : ""}`}></div>
+      <div className={`light green ${hightlight == "green" ? 'hightlight' : ""}`}></div>
+    </div>
+    </>
+  );
+}
+```
+```
+body {
+  font-family: sans-serif;
+}
+.traficLight {
+  width: 80px;
+  height: 240px;
+  border: 5px solid #000;
+  border-radius: 100px;
+  background-color: #bbb;
+  position: relative;
+}
+.traficLight:before{
+  border:2px solid #000;
+  content:"";
+  height: 100px;
+  width:5px;
+  position: absolute;
+  top:100%;
+  left:45%;
+  background: #000;
+
+}
+.traficLight > div {
+  width: 80px;
+  height: 80px;
+  border: 0px solid #eee;
+  border-radius: 100px;
+  background: #aaa;
+  box-shadow:1px 1px 10px 2px #000000
+}
+.traficLight > div.red.hightlight {
+  background: #ff0000;
+}
+.traficLight > div.yellow.hightlight {
+  background: #ff0;
+}
+.traficLight > div.green.hightlight {
+  background: green;
+}
+
+```
 
