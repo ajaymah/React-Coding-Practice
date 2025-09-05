@@ -352,12 +352,26 @@ export default function App() {
       setlistOne(b1)
     }
   }
+  const moveAll =(val)=>{
+    if(val === "R"){
+      let c1 = [...listOne]
+      const x = c1.concat(listTwo);
+      setlistTwo(x);
+      setlistOne([])
+    }
+    if(val === "L"){
+       let c1 = [...listTwo]
+       const x = c1.concat(listOne);
+       setlistTwo([]);
+       setlistOne(x)
+    }
+  }
   return (
     <div>{JSON.stringify(checkA)}
     {JSON.stringify(checkB)}
       <div className="wrapper">
         <ul className="grid">
-          {listOne.map((x)=>{
+          {listOne && listOne.length > 0 && listOne.map((x)=>{
             return(
               <li key={x}><input type="checkbox"  name={x} onChange={(e)=>handlechange(e,"A")}/>{x}</li>
             )
@@ -365,14 +379,14 @@ export default function App() {
         </ul>
         <ul className="gridbtn">
         <li>
-        <button>{"<<"}</button>
-        <button onClick={()=>move("L")}>{"<"}</button>
-        <button onClick={()=>move("R")}>{">"}</button>
-        <button >{">>"}</button>
+        <button disabled={ listTwo.length == 0 ? true : false} onClick={()=>moveAll("L")}>{"<<"}</button>
+        <button disabled={Object.values(checkB).includes(true) ? false : true} onClick={()=>move("L")}>{"<"}</button>
+        <button disabled={Object.values(checkA).includes(true) ? false : true} onClick={()=>move("R")}>{">"}</button>
+        <button disabled={ listOne.length == 0 ? true : false} onClick={()=>moveAll("R")} >{">>"}</button>
         </li>
         </ul>
         <ul className="grid">
-          {listTwo.map((x)=>{
+          {listTwo && listTwo.length >0 && listTwo.map((x)=>{
             return(
               <li key={x}><input type="checkbox" name={x} onChange={(e)=>handlechange(e,"B")} />{x}</li>
             )
@@ -382,6 +396,7 @@ export default function App() {
     </div>
   );
 }
+
 
 ```
 
