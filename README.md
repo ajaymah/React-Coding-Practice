@@ -400,4 +400,157 @@ export default function App() {
 
 ```
 
+### 6 - User Registration Form ###
+```
+import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
+import {setUser} from './store/user/actions';
+import { useDispatch } from 'react-redux';
+
+
+type formDataType = {
+  firstName:string,
+  lastName:string,
+  email:string,
+  password:string,
+  gen:string,
+  country:string,
+  accept:Boolean,
+}
+type country = {
+  name: {
+    common: string;
+  }
+  flags: {
+    png:string;
+  }
+}
+type dataType = {
+  firstName:string,
+  lastName:string,
+  email:string,
+  gen:string,
+  country:string,
+  accept:Boolean,
+  flag?:string,
+}
+const UserRegistration = ()=>{
+  const dispatch = useDispatch()
+    const [formData, setFormData] = useState<formDataType>({
+    firstName:"",
+    lastName:"",
+    email:"",
+    password:"",
+    gen:"",
+    country:"",
+    accept:false,
+  });
+  const [countryName, setCountryName] = useState<country[]>([])
+  const [userData, setuserData] = useState<dataType[]>([])
+  const navigate = useNavigate()
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value })
+  }
+  const handleChangeSelect = (e:React.ChangeEvent<HTMLSelectElement>)=>{
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value })    
+  }
+  const handleChangeChecked = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const {name, checked} = e.target;
+    setFormData({...formData, [name]: checked })
+  }
+  const handleSubmit = (e:React.FormEvent)=>{
+    e.preventDefault()
+    const data = [...userData]
+    const cflag = countryName.find((data)=> data.name.common === formData.country);
+    const pushData = {...formData, flag:cflag?.flags.png}
+    data.push(pushData)
+    setuserData(data);
+    setFormData({
+    firstName:"",
+    lastName:"",
+    email:"",
+    password:"",
+    gen:"",
+    country:"",
+    accept:false,
+    })
+    
+    navigate('/users')
+    dispatch(setUser(data));
+  }
+
+  useEffect(()=>{
+    const URL = `https://restcountries.com/v3.1/all?fields=name,flags`
+
+    fetch(URL).then((responce)=> {
+      if(!responce.ok){
+        throw new Error("failed data");
+      }
+      return responce.json();
+    }).then((res)=>{
+      setCountryName(res)
+    })
+    return ()=> {
+
+    }
+
+  },[])
+    return(
+        <>
+        
+      
+        <div className='userRegister'>
+        <fieldset>
+          <form onSubmit={(e)=>handleSubmit(e)} >
+          <legend>User Registration</legend>
+          <div className='cols-1'>
+          <div className='cols-2'>
+            <label htmlFor={"firstName"}>First name</label>
+            <input type='text' id="firstName" name='firstName' value={formData.firstName} onChange={(e)=> handleChange(e)} />
+          </div>
+          <div className='cols-2 padL10'>
+            <label htmlFor="lastName">Last name</label>
+            <input type='text' id="lastName"  name='lastName' value={formData.lastName} onChange={(e)=> handleChange(e)} />
+          </div>
+          </div>
+          <div className='cols-1'>
+            <label htmlFor="email">Email</label>
+            <input type='text' id="email" name='email'  value={formData.email}  onChange={(e)=> handleChange(e)} />
+          </div>
+          <div className='cols-1 '>
+            <label htmlFor='password'>Password</label>
+            <input type='password' id="password" name='password'  value={formData.password} onChange={(e)=> handleChange(e)} />
+          </div>
+          <div className='cols-1 '>
+            <label>Gender</label>
+            <span><input type='radio' name='gen' checked={formData.gen === "Male" ? true : false} value={"Male"} onChange={(e)=> handleChange(e)} />Male</span>  
+            <span><input type='radio' name="gen" checked={formData.gen === "Female" ? true : false} value={"Female"} onChange={(e)=> handleChange(e)} />Female</span>
+          </div>
+          <div className='cols-1 '>
+            <label>Country</label>
+            <select name="country"  value={formData.country} onChange={(e)=> handleChangeSelect(e)}>
+              <option>Select...</option>
+              {countryName.map((data)=> <option>{data.name.common}</option> )}
+            </select>
+          </div>
+          <div className='cols-1 '>
+          <input type='checkbox' name="accept" checked={formData.accept === true ? true : false} onChange={(e)=> handleChangeChecked(e)} /> I accept the terms and conditions
+          </div>
+          <div className='cols-1 '>
+          <input type='submit' /> 
+          </div>
+          </form>  
+        </fieldset>
+        
+        </div>
+        
+     
+        </>
+    )
+}
+export default UserRegistration;
+```
+
 
