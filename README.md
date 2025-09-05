@@ -305,4 +305,84 @@ export default function App() {
 
 ```
 
+### 5- Transfer list ###
+```
+import React, {useState,useEffect} from 'react'
+export default function App() {
+  const [listOne, setlistOne] = useState(["HTML",'JavaScript','CSS','TypeScript']);
+  const [listTwo, setlistTwo] = useState(["React",'Angular','Vue','Svelte']);
+  const [checkA,setcheckA] = useState({})
+  const [checkB,setcheckB] = useState({})
+  const handlechange = (e,val)=>{
+    if(val == 'A'){
+      const {name,checked} = e.target
+      setcheckA({...checkA, [name]: checked})
+    } else if(val == 'B') {
+      const {name,checked} = e.target
+     setcheckB({...checkB, [name]: checked})
+    }
+    
+  }
+  const move =(val)=>{
+    if(val == 'R'){
+      let a1 = [...listOne]
+      let a2 = [...listTwo]
+      for (let key in checkA) {
+        if(checkA[key] == true){          
+           let x1 = (a1.indexOf(key))
+           a1.splice(x1, 1)
+           a2.push(key)
+        }
+      }
+      setcheckA({})
+      setlistOne(a1)
+      setlistTwo(a2)
+    } else {
+      let b1 = [...listOne]
+      let b2 = [...listTwo]
+      for (let key in checkB) {
+        if(checkB[key] == true){          
+           let x1 = (b2.indexOf(key))
+           b2.splice(x1, 1)
+           b1.push(key)
+        }
+      }
+      setcheckB({})      
+      setlistTwo(b2)
+      setlistOne(b1)
+    }
+  }
+  return (
+    <div>{JSON.stringify(checkA)}
+    {JSON.stringify(checkB)}
+      <div className="wrapper">
+        <ul className="grid">
+          {listOne.map((x)=>{
+            return(
+              <li key={x}><input type="checkbox"  name={x} onChange={(e)=>handlechange(e,"A")}/>{x}</li>
+            )
+          })}
+        </ul>
+        <ul className="gridbtn">
+        <li>
+        <button>{"<<"}</button>
+        <button onClick={()=>move("L")}>{"<"}</button>
+        <button onClick={()=>move("R")}>{">"}</button>
+        <button >{">>"}</button>
+        </li>
+        </ul>
+        <ul className="grid">
+          {listTwo.map((x)=>{
+            return(
+              <li key={x}><input type="checkbox" name={x} onChange={(e)=>handlechange(e,"B")} />{x}</li>
+            )
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+```
+
 
