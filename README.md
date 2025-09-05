@@ -553,4 +553,64 @@ const UserRegistration = ()=>{
 export default UserRegistration;
 ```
 
+### 7- Tabs ####
+```
+import React, { useState  } from 'react';
+export default function Accordion() {
+  const [tab,setTab] = useState({
+    html: false,
+    css: false,
+    js: false
+  });
+  const tabHandle = (val)=>{
+    setTab({...tab, [val]:tab[val] ? false: true})
+  }
+  return (
+    <div>
+      <div>
+        <div onClick={()=> tabHandle("html")}>
+          HTML1{' '} <span  aria-hidden={true}  className="accordion-icon" />
+        </div>
+        {tab.html && <div>
+          The HyperText Markup Language or HTML is the
+          standard markup language for documents designed to
+          be displayed in a web browser.
+        </div>}
+      </div>
+      <div>
+        <div onClick={()=> tabHandle("css", tab.html ? false : true)}>
+          CSS{' '}
+          <span
+            aria-hidden={true}
+            className="accordion-icon"
+           
+          />
+        </div>
+        { tab.css && <div>
+          Cascading Style Sheets is a style sheet language
+          used for describing the presentation of a document
+          written in a markup language such as HTML or XML.
+        </div>}
+      </div>
+      <div>
+        <div onClick={()=> tabHandle('js')}>
+          JavaScript{' '}
+          <span
+            aria-hidden={true}
+            className="accordion-icon"            
+          />
+        </div>
+        { tab.js && <div>
+          JavaScript, often abbreviated as JS, is a
+          programming language that is one of the core
+          technologies of the World Wide Web, alongside HTML
+          and CSS.
+        </div>}
+      </div>
+    </div>
+  );
+}
+
+```
+
 
